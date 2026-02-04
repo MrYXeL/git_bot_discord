@@ -126,7 +126,7 @@ class replayblackjack(discord.ui.View):
         super().__init__(timeout=30)
         self.author_id = author_id
 
-    @discord.ui.button(label="Replay", style=discord.ButtonStyle.red, row=4)
+    @discord.ui.button(label="Play Again ♠️", style=discord.ButtonStyle.green, row=4)
     async def replay(self, interaction: discord.Interaction, button: discord.ui.Button):
         if await not_your(interaction, self.author_id):
             return
@@ -165,7 +165,7 @@ class BlackjackView(discord.ui.View):
         if await not_your(interaction, self.author_id):
             return
         
-        embed = blackjack_embed(interaction, self.bet)
+        embed = blackjack_embed(interaction.user.id, interaction.user.display_name, self.bet)
         drawed = draw_card(self.drawed_list)
         self.player.append(drawed)
         self.drawed_list.append(drawed)
@@ -208,7 +208,7 @@ class BlackjackView(discord.ui.View):
         if await not_your(interaction, self.author_id):
             return
         
-        embed = blackjack_embed(interaction, self.bet)
+        embed = blackjack_embed(interaction.user.id, interaction.user.display_name, self.bet)
         p_v = hand_value(self.player)
         b_v = hand_value(self.bank)
 
@@ -331,7 +331,7 @@ class BlackjackView(discord.ui.View):
             return
         
         remove_money(self.author_id, self.bet)
-        embed = blackjack_embed(interaction, (self.bet)*2)
+        embed = blackjack_embed(interaction.user.id, interaction.user.display_name, (self.bet)*2)
         self.bet = (self.bet)*2
         drawed = draw_card(self.drawed_list)
         self.player.append(drawed)
@@ -351,7 +351,7 @@ class BlackjackView(discord.ui.View):
         )
 
         if p_v>21:
-            b_v = hand_value([self.bank[0]])
+            b_v = hand_value(self.bank)
             embed.set_field_at(
                 0,
                 name="Bank's Hand",
@@ -404,7 +404,7 @@ class BetModal(discord.ui.Modal, title="♠️ BlackJack - Place your bet"):
 
         remove_money(self.author_id, bet_amount)
 
-        embed = blackjack_embed(interaction, self.bet)
+        embed = blackjack_embed(interaction.user.id, interaction.user.display_name, self.bet.value)
 
         drawed_list = []
         player = []
