@@ -12,17 +12,17 @@ mat = [
 
 def rd():
     r = randint(1,100)
-    if r <= 12:
+    if r <= 10:
         r = randint(1, 100)
-        if r < 35:
+        if 1 <= r <= 35:
             fruit = 0
-        elif r < 60:
+        elif 36 <= r <= 60:
             fruit = 1
-        elif r < 78:
+        elif 61 <= r <= 78:
             fruit = 2
-        elif r < 90:
+        elif 79 <= r <= 90:
             fruit = 3
-        elif r < 97:
+        elif 91 <= r <= 97:
             fruit = 4
         else:
             fruit = 5
@@ -31,21 +31,22 @@ def rd():
 
 def rd_slot_fruit() -> list[int]:
     slots = [-1, -1, -1]
-    for i in range(3):
-        r = randint(1, 100)
-        if r < 35:
-            fruit = 0
-        elif r < 60:
-            fruit = 1
-        elif r < 78:
-            fruit = 2
-        elif r < 90:
-            fruit = 3
-        elif r < 97:
-            fruit = 4
-        else:
-            fruit = 5
-        slots[i] = fruit
+    while(slots[0] == slots[1] and slots[1] == slots[2]):
+        for i in range(3):
+            r = randint(1, 100)
+            if 1 <= r <= 35:
+                fruit = 0
+            elif 36 <= r <= 60:
+                fruit = 1
+            elif 61 <= r <= 78:
+                fruit = 2
+            elif 79 <= r <= 90:
+                fruit = 3
+            elif 91 <= r <= 97:
+                fruit = 4
+            else:
+                fruit = 5
+            slots[i] = fruit
     return slots
 
 

@@ -33,6 +33,10 @@ async def on_ready():
     except Exception as e:
         print(f"[{time.strftime("%Y-%m-%d %H:%M:%S")}] [ERROR   ] \n{e}")
 
+    await bot.change_presence(
+        activity=discord.Game(name="/play")
+    )
+
     print(f"[{time.strftime("%Y-%m-%d %H:%M:%S")}] [INFO    ] Bot Ready To Use")
 
 
@@ -47,15 +51,6 @@ class SlotView(discord.ui.View):
     async def replay(self, interaction: discord.Interaction, button: discord.ui.Button):
         if await not_your(interaction, self.author_id):
             return
-
-        #coldown
-        '''
-        button.disabled = True
-        await interaction.response.edit_message(view=self)
-        await asyncio.sleep(1)
-        button.disabled = False
-        await interaction.edit_original_response(view=self)
-        '''
 
         current_money = get_or_create_user(self.author_id)
         if (current_money-SLOT_PRICE) >= 0:
