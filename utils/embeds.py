@@ -9,4 +9,4 @@ def casino_embed(user):
     )
 
 def blackjack_embed(id, name, bet):
-    return discord.Embed(title=f"♠️ {name}'s BlackJack", description=f"Your bet : ${bet}\nYou have ${(get_or_create_user(id)) - int(bet)}")
+    return discord.Embed(title=f"♠️ {name}'s BlackJack", description=f"Your bet : ${bet}\nYou have ${(get_or_create_user(id))}")

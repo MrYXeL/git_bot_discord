@@ -73,7 +73,7 @@ class SlotView(discord.ui.View):
             await interaction.response.edit_message(embed=embed)
         else:
             await interaction.response.send_message(
-                    "❌ You don't have enough money !\nWait for the next /daily",
+                    "❌ You don't have enough money !",
                     ephemeral=True
                 )
     
@@ -330,6 +330,12 @@ class BlackjackView(discord.ui.View):
         if await not_your(interaction, self.author_id):
             return
         
+        if (not (get_or_create_user(self.author_id) - self.bet) >= 0):
+            await interaction.response.send_message(
+                "❌ You don't have enough money !",
+                ephemeral=True
+            )
+            return
         remove_money(self.author_id, self.bet)
         embed = blackjack_embed(interaction.user.id, interaction.user.display_name, (self.bet)*2)
         self.bet = (self.bet)*2
@@ -395,12 +401,18 @@ class BetModal(discord.ui.Modal, title="♠️ BlackJack - Place your bet"):
         bet_amount = int(self.bet.value)
 
         balance = get_or_create_user(interaction.user.id)
-        if bet_amount <= 0 or bet_amount > balance:
+        if bet_amount <= 0:
             await interaction.response.send_message(
                 "❌ Invalid bet amount",
                 ephemeral=True
             )
             return
+        elif bet_amount > balance:
+            await interaction.response.send_message(
+                "❌ You don't have enough money !",
+                ephemeral=True
+            )
+
 
         remove_money(self.author_id, bet_amount)
 
@@ -539,7 +551,7 @@ class PlayView(discord.ui.View):
             )
         else:
             await interaction.response.send_message(
-                    "❌ You don't have enough money !\nWait for the next /daily",
+                    "❌ You don't have enough money !",
                     ephemeral=True
                 )
             
@@ -579,14 +591,16 @@ async def profile(interaction: discord.Interaction, player: discord.User):
 @bot.tree.command(name="play", description="Start to play")
 async def play(interaction: discord.Interaction):
     user_id = interaction.user.id
-    embed = casino_embed(interaction.user)
+    
     if can_claim_daily(user_id):
         add_money(user_id, DAILY_VALUE)
         set_daily(user_id)
-
+        embed = casino_embed(interaction.user)
         embed.add_field(
             name="💰 Daily", 
             value=f"You have claim your daily credits and got ${DAILY_VALUE}")
+    else:
+        embed = casino_embed(interaction.user)
 
 
     await interaction.response.send_message(
