@@ -610,11 +610,4 @@ async def play(interaction: discord.Interaction):
 
 
 
-#TODO voir /daily attendre 24h exactement ou quand changement de jour ?
-
-#TODO verifier anglais
-#TODO embed Refactor factory, utils
-
-
-
 bot.run(os.getenv("TOKEN"))
