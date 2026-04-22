@@ -33,7 +33,7 @@ python main.py
 ## Configuration
 Créer un fichier .env à la racine :
 ```
-DISCORD_TOKEN=ton_token_ici
+TOKEN=ton_token_ici
 ```
 
 [1]: https://sqlite.org
