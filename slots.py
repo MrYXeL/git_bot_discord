@@ -58,37 +58,31 @@ def calcul_gain(slots):
             pass
         elif (slots[1][col] == slots[2][col]):
             gain += mat[slots[0][col]][1]
-            print("col")
     #diag \
     for i in range(3):
         if (slots[0][i] == slots[1][i+1] == slots[2][i+2]):
             gain += mat[slots[0][i]][1]
-            print("diag hg to bd")
     #diag /
     for i in range(2 , 5):
         if (slots[0][i] == slots[1][i-1] == slots[2][i-2]):
             gain += mat[slots[0][i]][1]
-            print("diag hd to bg")
     #ligne 5
     li_done = []
     for li in range(3):
         if (slots[li][0] == slots[li][1] == slots[li][2] == slots[li][3] == slots[li][4]):
             gain += (3 * mat[slots[li][2]][1])
             li_done.append(li)
-            print("l5")
     #ligne 4
     for li in range(3):
         if not (li in li_done):
             if (slots[li][0] == slots[li][1] == slots[li][2] == slots[li][3] or slots[li][1] == slots[li][2] == slots[li][3] == slots[li][4]):
                 gain += (2 * mat[slots[li][2]][1])
                 li_done.append(li)
-                print("l4")
     #ligne 3
     for li in range(3):
         if not (li in li_done):
             if (slots[li][0] == slots[li][1] == slots[li][2] or slots[li][1] == slots[li][2] == slots[li][3] or slots[li][2] == slots[li][3] == slots[li][4]):
                 gain += (mat[slots[li][2]][1])
                 li_done.append(li)
-                print("l3")
 
     return gain
