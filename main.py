@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from utils.embeds import casino_embed, blackjack_embed
 from utils.game_logic import not_your
 
-from slots import rd_slot_fruit, format_slots, mat, calcul_gain, rd
+from slots import slots_affiche, mat, calcul_gain, rd
 from manipDb import get_or_create_user, add_money, remove_money, get_daily, set_daily, top, get_user
 from blackjack import draw_card, hand_value, has_blackjack
 
@@ -56,19 +56,20 @@ class SlotView(discord.ui.View):
         if (current_money-SLOT_PRICE) >= 0:
             current_money -= SLOT_PRICE
             remove_money(self.author_id, SLOT_PRICE)
-            win = rd()
-            result = format_slots(win)
-            gain = calcul_gain(win)
+            roll = rd()
+            affichage = slots_affiche(roll)
+            gain = calcul_gain(roll)
 
             embed = discord.Embed(
                 title="🎰 Slot Machine",
-                description=result
+                description=affichage
             )
             if gain != 0:
                 current_money += gain
                 add_money(self.author_id, gain)
-
-            embed.add_field(name="", value=f"Current Balance : **{current_money}**")   
+                embed.add_field(name="", value=f"Current Balance : **{current_money} (+{gain})**")
+            else:
+                embed.add_field(name="", value=f"Current Balance : **{current_money}**")  
 
             await interaction.response.edit_message(embed=embed)
         else:
@@ -87,6 +88,23 @@ class SlotView(discord.ui.View):
                 value=f"**{fruit[2]}%** {fruit[0]} **:** **{fruit[1]}**",
                 inline=False
             )
+        embed.add_field(
+            name="",
+            value="Line of **5** : mult **x3**",
+            inline=False
+        )
+
+        embed.add_field(
+            name="",
+            value="Line of **4** : mult **x2**",
+            inline=False
+        )
+
+        embed.add_field(
+            name="",
+            value="Everything **else** : mult **x1**",
+            inline=False
+        )
 
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
@@ -531,19 +549,20 @@ class PlayView(discord.ui.View):
         if (current_money-SLOT_PRICE) >= 0:
             current_money -= SLOT_PRICE
             remove_money(user_id, SLOT_PRICE)
-            win = rd()
-            result = format_slots(win)
-            gain = calcul_gain(win)
+            roll = rd()
+            affichage = slots_affiche(roll)
+            gain = calcul_gain(roll)
 
             embed = discord.Embed(
                 title="🎰 Slot Machine",
-                description=result
+                description=affichage
             )
             if gain != 0:
                 current_money += gain
                 add_money(user_id, gain)
-
-            embed.add_field(name="", value=f"Current Balance : **{current_money}**")   
+                embed.add_field(name="", value=f"Current Balance : **{current_money} (+{gain})**")
+            else:
+                embed.add_field(name="", value=f"Current Balance : **{current_money}**")   
 
             await interaction.response.edit_message(
                 embed=embed,
