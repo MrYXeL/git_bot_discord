@@ -587,7 +587,7 @@ class PlayView(discord.ui.View):
 #-------------------------------------------Utilities-------------------------------------------
 def can_claim_daily(user_id):
     last_daily = get_daily(user_id)
-    if last_daily is None:
+    if last_daily is None or last_daily == -1:
         return True
 
     return time.time() - last_daily >= 86400

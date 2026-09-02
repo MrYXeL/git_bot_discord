@@ -71,6 +71,8 @@ def get_daily(user_id):
     row = cur.fetchone()
     
     conn.close()
+    if not row:
+        return -1
     return(row[0])
 
 def set_daily(user_id):
